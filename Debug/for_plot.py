@@ -4,7 +4,7 @@ import json
 import sys
 import os
 import numpy as np
-sys.path.append(os.path.abspath('../Highlight_evaluation/'))
+sys.path.append(os.path.abspath('../Evaluation/'))
 from evaluation_metrics import *
 from scipy.stats import pearsonr
 

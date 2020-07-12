@@ -6,7 +6,7 @@ import os
 import numpy as np
 from scipy.stats import pearsonr
 from scipy import spatial
-sys.path.append(os.path.abspath('../Highlight_evaluation/'))
+sys.path.append(os.path.abspath('../Evaluation/'))
 from alignment_check import get_ground_truth
 from evaluation_metrics import *
 

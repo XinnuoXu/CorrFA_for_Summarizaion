@@ -2,7 +2,7 @@
 
 import sys
 import os
-sys.path.append(os.path.abspath('../Document_highlight.BERT/'))
+sys.path.append(os.path.abspath('../Highlight/'))
 from highlight import *
 from highlight_HROUGED import *
 

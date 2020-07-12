@@ -19,7 +19,7 @@ Run `sh run.sh`. it will create a directory called `output/` containing followin
 
 ## Step3: Visualization
 
-To visualize the fact/argument distances (`{k}.txt`) and fact level weights (`{k}.hl`), you can copy the file you are interested in to `../display/` and replace it to the file `attn_vis_data.json`. Then run
+To visualize the fact/argument distances (`{k}.txt`) and fact level weights (`{k}.hl`), you can copy the file you are interested in to `../Display/` and replace it to the file `attn_vis_data.json`. Then run
 
 ```
 sh run_service.sh

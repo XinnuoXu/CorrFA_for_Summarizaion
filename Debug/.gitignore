@@ -4,3 +4,4 @@ temp_dir/
 *.py[cod]
 output/*
 output/
+__pycache__/

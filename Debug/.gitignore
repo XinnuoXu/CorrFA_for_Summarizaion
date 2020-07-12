@@ -1,3 +1,6 @@
 temp_dir/*
+temp_dir/
 *.swp
 *.py[cod]
+output/*
+output/

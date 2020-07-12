@@ -1,4 +1,5 @@
 # AMT for Doc-Summ alignment
+Manual Annotation Collection (AMT) for paper paper "*Xinnuo Xu, Ondrej Dusek, Jingyi Li, Yannis Konstas, and Verena Rieser*. Fact-based Content Weighting for Evaluating Abstractive Summarisation" *Proceedings of ACL2020* :tada: :tada: :tada:
 
 ## Quick Start
 

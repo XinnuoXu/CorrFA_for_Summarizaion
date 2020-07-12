@@ -4,8 +4,9 @@
 ## Step1: Create your examples
 To try some DIY examples, you should write your examples down in `input.src` and `input.tgt`. `input.src` is for document trees and `input.tgt` is for summaries(just sentences, not trees). Note that
 
-* the number of lines in `input.src` is equal to `input.tgt`
-* lines in `input.src` should be the copy of the first row (sorry for the duplication. I will make it decent soon)
+* each line in `input.src` is the tree MR for a document. The format is strings jointed by '\t'.
+* the number of lines in `input.src` is equal to `input.tgt`.
+* lines in `input.src` should be the copy of the first row (sorry for the duplication. I will make it decent soon).
 * the first row in `input.tgt` should be the ground truth. Please find some examples in `input.src` and `input.tgt` in this repository. 
 
 ## Step2: Get Corr scores and debug information

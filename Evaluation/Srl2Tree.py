@@ -111,6 +111,7 @@ class Srl2Tree():
             cand_tree = self.one_summary(srl_res["srl_cand"])
             document_trees = [self.one_summary(item) for item in srl_res["srl_document"]]
             out_json = {}
+            out_json["doc_id"] = srl_res["doc_id"]
             out_json["gold"] = srl_res["gold"]
             out_json["cand"] = srl_res["cand"]
             out_json["document"] = srl_res["document"]

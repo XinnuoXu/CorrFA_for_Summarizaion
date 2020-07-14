@@ -15,7 +15,7 @@ class Str2Srl():
         self.batch_size = 30
         print ("Initializing Str2Srl Done...")
 
-    def get_srl(self, sentences):
+    def get_srl(self, sentences, doc_id):
         one_file = {}
         sentences = [{"sentence": line} for line in sentences]
         srl_res = []; start_idx = 0
@@ -30,6 +30,7 @@ class Str2Srl():
             one_file["document"] = sentences[:-2]
             one_file["gold"] = sentences[-2]
             one_file["cand"] = sentences[-1]
+            one_file["doc_id"] = doc_id
             return json.dumps(one_file)
         return ""
 
@@ -43,7 +44,7 @@ class Str2Srl():
             sentences = line.strip().split('\t')
             sentences.append(golds[i])
             sentences.append(cands[i])
-            srl_res = self.get_srl(sentences)
+            srl_res = self.get_srl(sentences, str(i))
             if srl_res != "":
                 outputs.append(srl_res)
         print ("Building Srls Done...")

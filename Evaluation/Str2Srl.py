@@ -35,9 +35,9 @@ class Str2Srl():
 
     def process(self, src_file, gold_file, cand_file):
         print ("Building Srls...")
-        srcs = [line.strip() for line in open(src_file)]
-        golds = [line.strip() for line in open(gold_file)]
-        cands = [line.strip() for line in open(cand_file)]
+        srcs = [line.strip().lower() for line in open(src_file)]
+        golds = [line.strip().lower() for line in open(gold_file)]
+        cands = [line.strip().lower() for line in open(cand_file)]
         outputs = []
         for i, line in enumerate(srcs):
             sentences = line.strip().split('\t')

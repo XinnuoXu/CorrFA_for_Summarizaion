@@ -27,9 +27,6 @@ class Str2Srl():
             one_file["srl_document"] = srl_res[:-2]
             one_file["srl_gold"] = srl_res[-2]
             one_file["srl_cand"] = srl_res[-1]
-            one_file["document"] = sentences[:-2]
-            one_file["gold"] = sentences[-2]
-            one_file["cand"] = sentences[-1]
             one_file["doc_id"] = doc_id
             return json.dumps(one_file)
         return ""

@@ -35,25 +35,54 @@ if __name__ == '__main__':
     parser.add_argument("-src_path", default='./Data/50_files.src', type=str)
     parser.add_argument("-gold_path", default='./Data/50_files.gold', type=str)
     parser.add_argument("-cand_path", default='./Data/50_files.cand', type=str)
-    parser.add_argument("-srl_path", default='./Data/50_files.srl', type=str)
-    parser.add_argument("-tree_path", default='./Data/50_files.tree', type=str)
     parser.add_argument('-srl_archive_path', default='./Evaluation/srl-model-2018.05.25.tar.gz', type=str)
     parser.add_argument('-srl_batch_size', default=30, type=int)
 
-    # content weighting parameters
+    # Content weighting parameters
     parser.add_argument("-cw_gold_path", default='./Data/cw_gold', type=str)
     parser.add_argument("-cw_cand_path", default='./Data/cw_cand', type=str)
     parser.add_argument('-cw_thred_num', default=20, type=int)
 
+    # Process control
+    parser.add_argument("-run_srl", type=str2bool, nargs='?', const=True, default=True)
+    parser.add_argument("-srl_path", default='', type=str)
+    parser.add_argument("-run_tree", type=str2bool, nargs='?', const=True, default=True)
+    parser.add_argument("-tree_path", default='', type=str)
+
     args = parser.parse_args()
-    srl_obj = Str2Srl.Str2Srl(args.srl_archive_path)
-    tree_obj = Srl2Tree.Srl2Tree()
 
-    # Get trees for doc, gold, cand
-    srl_res = srl_obj.process(args.src_path, args.gold_path, args.cand_path)
-    tree_res = tree_obj.process(srl_res)
-    doc_trees, gold_trees, cand_trees = read_from_tree(tree_res)
+    '''
+    @@ Get SRL
+    '''
+    if args.run_srl:
+        # Get srls for doc, gold, cand
+        srl_obj = Str2Srl.Str2Srl(args.srl_archive_path)
+        srl_res = srl_obj.process(args.src_path, args.gold_path, args.cand_path)
+    elif args.srl_path == '':
+        print ('[ERROR] srl_path can\'t be empty if run_srl is False')
+        exit (1)
+    else:
+        # Read srls from srl_path for doc, gold, cand
 
+
+    '''
+    @@ Get Tree
+    '''
+    if args.run_tree:
+        # Get trees for doc, gold, cand
+        tree_obj = Srl2Tree.Srl2Tree()
+        tree_res = tree_obj.process(srl_res)
+        doc_trees, gold_trees, cand_trees = read_from_tree(tree_res)
+    elif args.tree_path == '':
+        print ('[ERROR] tree_path can\'t be empty if run_tree is False')
+        exit (1)
+    else:
+        # Read trees from tree_path for doc, gold, cand
+
+
+    '''
+    @@ Get Content Weights
+    '''
     # Get Content Weight refering to Gold
     gold_set = CWeighting.DataSet(doc_trees, gold_trees, args.cw_gold_path, thred_num=args.cw_thred_num)
     gold_set.preprocess_mult()
@@ -61,6 +90,10 @@ if __name__ == '__main__':
     cand_set = CWeighting.DataSet(doc_trees, cand_trees, args.cw_cand_path, thred_num=args.cw_thred_num)
     cand_set.preprocess_mult()
 
+
+    '''
+    @@ Get Pearson Correlation Coefficient (PCC)
+    '''
     # Get Correlation
     corr_obj = Correlation.Correlation()
     preds_gold_ph = corr_obj.load_cw(args.cw_gold_path, "phrase")

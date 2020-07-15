@@ -119,6 +119,27 @@ class Correlation():
             preds[doc_id] = pred
         return preds
 
+    def load_human(self, gold_highlight_path, doc_trees, task):
+        gold_highlight = {}
+        for line in open(gold_highlight_path):
+            json_obj = json.loads(line.strip())
+            doc_id = json_obj["doc_id"]
+            summ = json_obj["summary"]
+            if isinstance(summ, dict):
+                tag = summ["name"]
+                if doc_id not in gold_highlight:
+                    gold_highlight[doc_id] = {}
+                gold_highlight[doc_id][tag] = json_obj
+            else:
+                gold_highlight[doc_id] = json_obj
+
+        gtruths = {}
+        for doc_id in gold_highlight:
+            article_lst = doc_trees[doc_id]
+            gtruth = get_ground_truth(article_lst, gold_highlight[doc_id], task)
+            gtruths[doc_id] = gtruth
+        return gtruths
+
     def evaluation(self, gold_highlight, pred_highlight):
         corr_all = []; corrs_01 = []
         for doc_id in gold_highlight:

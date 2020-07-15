@@ -58,12 +58,16 @@ if __name__ == '__main__':
         # Get srls for doc, gold, cand
         srl_obj = Str2Srl.Str2Srl(args.srl_archive_path)
         srl_res = srl_obj.process(args.src_path, args.gold_path, args.cand_path)
+    elif not args.run_tree:
+        pass
     elif args.srl_path == '':
         print ('[ERROR] srl_path can\'t be empty if run_srl is False')
-        exit (1)
+        exit(1)
     else:
         # Read srls from srl_path for doc, gold, cand
-
+        # TODO
+        print ("[ERROR] Still in TODO list")
+        exit(0)
 
     '''
     @@ Get Tree
@@ -78,7 +82,8 @@ if __name__ == '__main__':
         exit (1)
     else:
         # Read trees from tree_path for doc, gold, cand
-
+        tree_res = [line.strip() for line in open(args.tree_path)]
+        doc_trees, gold_trees, cand_trees = read_from_tree(tree_res)
 
     '''
     @@ Get Content Weights

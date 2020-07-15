@@ -1,5 +1,5 @@
 # CorrFA_for_Summarizaion
-Corr F/A evaluation metrics in paper "*Xinnuo Xu, Ondrej Dusek, Jingyi Li, Yannis Konstas, and Verena Rieser*. Fact-based Content Weighting for Evaluating Abstractive Summarisation" *Proceedings of ACL2020* :tada: :tada: :tada:
+Corr F/A evaluation metrics in paper "*Xinnuo Xu, Ondrej Dusek, Jingyi Li, Yannis Konstas, and Verena Rieser*. [Fact-based Content Weighting for Evaluating Abstractive Summarisation](https://www.aclweb.org/anthology/2020.acl-main.455.pdf)" *Proceedings of ACL2020* :tada: :tada: :tada:
 
 ## Environment setup
 

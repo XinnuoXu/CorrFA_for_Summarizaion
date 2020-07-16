@@ -26,14 +26,28 @@ wget https://s3-us-west-2.amazonaws.com/allennlp/models/srl-model-2018.05.25.tar
 mv srl-model-2018.05.25.tar.gz Evaluation/
 ```
 
-## Evaluate your output
-### 
+## Evaluate your output with CorrF/A
+### Scenario1: With plain text inputs
+We need three files for the evaluation, documents(`SRC_PATH`), gold summaries(`GOLD_PATH`), and model generated summaries(`CAND_PATH`). The format for document-file is one document per line and sentences are jointed by '\t'. The format for both gold-summary-file and generated-summary-file is one summary per line. The i-th row of document-file is paired with i-th row in gold-summary-file and generated-summary-file. The number of lines in each file should be the same. Examples are shown in `./Data/50_files`, `./Data/50_files.gold`, `./Data/50_files.cand`. To calculate CorrF/A, run: 
+
 ```
 #!/bin/bash
 
 SRC_PATH='./Data/50_files.src'
 GOLD_PATH='./Data/50_files.gold'
 CAND_PATH='./Data/50_files.cand'
+
+python evaluate.py \
+        -src_path ${SRC_PATH} \
+        -gold_path ${GOLD_PATH} \
+        -cand_path ${CAND_PATH}  
+```
+
+### Scenario1: With Tree structured inputs
+
+```
+#!/bin/bash
+
 TREE_PATH='./Data/bert.tree'
 
 python evaluate.py \
@@ -44,5 +58,7 @@ python evaluate.py \
         -run_srl False \
         -run_tree False
 ```
+
+
 
 

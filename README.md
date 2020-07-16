@@ -68,4 +68,20 @@ The example file `./Data/bert.tree` is generate in `./Data/` by running `python 
 ```
 respectively. The format for these three files is similar with plain text inputs. The only difference is that sentences are represented in tree MRs.
 
-## Examples Evaluation results
+## Evaluation results recovery
+The original data used in paper is offered in directory `./Data/`. 
+
+Lower half of Table 2 in paper is updated as:
+|  Model   | Corr-F | Corr-A |
+|----------|--------|--------|
+|TConvS2S  | 0.6584 | 0.6495 |
+|PtGen     | 0.6413 | 0.6106 |
+|BertSumAbs| 0.7080 | 0.6798 |
+
+The first column of Table 4 (CorrF/A) in paper is updated as:
+
+|  Model   | Corr-F | Corr-A |
+|----------|--------|--------|
+|TConvS2S  | 0.6157 | 0.6395 |
+|PtGen     | 0.6008 | 0.6268 |
+|BertSumAbs| 0.6579 | 0.6865 |

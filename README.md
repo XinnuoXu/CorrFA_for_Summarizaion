@@ -74,7 +74,7 @@ The original data used in paper is offered in directory `./Data/`.
 * `./Data/AMT_data/` Content weights highlighted by human judges using the Amazon Mechanical Turk platform.
 * `./Data/full_cases/` Documents, generated summaries by model `TConvS2S`, `PtGen`, `BertSumAbs` and gold summaries of the full XSum test set.
 
-After fixing some minor problems, the experiment results are updated as below.
+After fixing some minor problems, the experiment results are updated as below. The conclusion made in the paper is not changed.
 
 Lower half of Table 2 in paper is updated as:
 |  Model   | Corr-F | Corr-A |
@@ -90,3 +90,6 @@ The first column of Table 4 (CorrF/A) in paper is updated as:
 |TConvS2S  | 0.6157 | 0.6395 |
 |PtGen     | 0.6008 | 0.6268 |
 |BertSumAbs| 0.6579 | 0.6865 |
+
+## Other features
+* `./Debug/` offers a tool for content weighting visualization and system attacking. The README.md in the directory explains the tool in detail.

@@ -42,8 +42,10 @@ python evaluate.py \
         -gold_path ${GOLD_PATH} \
         -cand_path ${CAND_PATH}  
 ```
+The Corr-F and Corr-A will be printed out. Also, the content weights referring to gold summaries and generated summaries are saved in file `./Data/cw_gold` and `./Data/cw_cand` respectively. 
 
 ### Scenario1: With Tree structured inputs
+If the trees are built and saved in files, the evaluation can be run as:
 
 ```
 #!/bin/bash

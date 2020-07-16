@@ -1,5 +1,6 @@
 # CorrFA_for_Summarizaion
 Corr F/A evaluation metrics in paper "*Xinnuo Xu, Ondrej Dusek, Jingyi Li, Yannis Konstas, and Verena Rieser*. [Fact-based Content Weighting for Evaluating Abstractive Summarisation](https://www.aclweb.org/anthology/2020.acl-main.455.pdf)" *Proceedings of ACL2020* :tada: :tada: :tada:
+https://virtual.acl2020.org/paper_main.455.html
 
 ## Environment setup
 
@@ -30,7 +31,7 @@ mv srl-model-2018.05.25.tar.gz Evaluation/
 ### Scenario1: With plain text inputs
 We need three files for the evaluation, documents(`SRC_PATH`), gold summaries(`GOLD_PATH`), and model generated summaries(`CAND_PATH`). The format for document-file is one document per line and sentences are jointed by '\t'. The format for both gold-summary-file and generated-summary-file is one summary per line. The i-th row of document-file is paired with i-th row in gold-summary-file and generated-summary-file. The number of lines in each file should be the same. Examples are shown in `./Data/50_files`, `./Data/50_files.gold`, `./Data/50_files.cand`. To calculate CorrF/A, run: 
 
-```
+```shell
 #!/bin/bash
 
 SRC_PATH='./Data/50_files.src'
@@ -46,8 +47,7 @@ The Corr-F and Corr-A will be printed out. Also, the content weights referring t
 
 ### Scenario1: With Tree structured inputs
 If the trees are built and saved in files, the evaluation can be run as:
-
-```
+```shell
 #!/bin/bash
 
 TREE_PATH='./Data/bert.tree'
@@ -60,7 +60,12 @@ python evaluate.py \
         -run_srl False \
         -run_tree False
 ```
+The example file `./Data/bert.tree` is generate in `./Data/` by running `python full_cases_tree.py bert`. The script reads processed tree MRs of documents, old summaries and generated summaries from 
+```
+./Data/full_cases/bert_src.tree
+./Data/full_cases/bert_gold.tree
+./Data/full_cases/bert_cand.tree
+```
+respectively. The format for these three files is similar with plain text inputs. The only difference is that sentences are represented in tree MRs.
 
-
-
-
+## Examples Evaluation results

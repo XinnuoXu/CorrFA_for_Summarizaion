@@ -68,8 +68,10 @@ The example file `./Data/bert.tree` is generate in `./Data/` by running `python 
 ```
 respectively. The format for these three files is similar with plain text inputs. The only difference is that sentences are represented in tree MRs.
 
-## Evaluation results recovery
+## Evaluation results updates
 The original data used in paper is offered in directory `./Data/`. 
+
+![formula](https://render.githubusercontent.com/render/math?math=e^{i \pi} = -1)
 
 Lower half of Table 2 in paper is updated as:
 |  Model   | Corr-F | Corr-A |

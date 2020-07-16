@@ -70,8 +70,11 @@ respectively. The format for these three files is similar with plain text inputs
 
 ## Evaluation results updates
 The original data used in paper is offered in directory `./Data/`. 
+* `./Data/50_cases/` Documents, generated summaries by model `TConvS2S`, `PtGen`, `BertSumAbs` and gold summaries of the 50 human-annotated examples.
+* `./Data/AMT_data/` Content weights highlighted by human judges using the Amazon Mechanical Turk platform.
+* `./Data/full_cases/` Documents, generated summaries by model `TConvS2S`, `PtGen`, `BertSumAbs` and gold summaries of the full XSum test set.
 
-![formula](https://render.githubusercontent.com/render/math?math=e^{i \pi} = -1)
+After fixing some minor problems, the experiment results are updated as below.
 
 Lower half of Table 2 in paper is updated as:
 |  Model   | Corr-F | Corr-A |

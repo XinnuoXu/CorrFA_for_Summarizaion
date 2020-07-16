@@ -31,7 +31,7 @@ mv srl-model-2018.05.25.tar.gz Evaluation/
 ### Scenario1: With plain text inputs
 We need three files for the evaluation, documents(`SRC_PATH`), gold summaries(`GOLD_PATH`), and model generated summaries(`CAND_PATH`). The format for document-file is one document per line and sentences are jointed by '\t'. The format for both gold-summary-file and generated-summary-file is one summary per line. The i-th row of document-file is paired with i-th row in gold-summary-file and generated-summary-file. The number of lines in each file should be the same. Examples are shown in `./Data/50_files`, `./Data/50_files.gold`, `./Data/50_files.cand`. To calculate CorrF/A, run: 
 
-```shell
+```bash
 #!/bin/bash
 
 SRC_PATH='./Data/50_files.src'
@@ -47,7 +47,7 @@ The Corr-F and Corr-A will be printed out. Also, the content weights referring t
 
 ### Scenario1: With Tree structured inputs
 If the trees are built and saved in files, the evaluation can be run as:
-```shell
+```bash
 #!/bin/bash
 
 TREE_PATH='./Data/bert.tree'

@@ -3,7 +3,7 @@
 if __name__ == '__main__':
     ids = [line.strip() for line in open('./50_cases/50_ids.txt')]
     src_dir = './50_cases/50_docs/'
-    cand_dir = "./50_cases/system_tconvs2s/"
+    cand_dir = "./50_cases/system_bert/"
     gold_dir = "./50_cases/ref_gold/"
     fpout_src = open("50_files.src", "w")
     fpout_gold = open("50_files.gold", "w")

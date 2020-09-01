@@ -25,6 +25,7 @@ conda install -c conda-forge pipenv
 For `yarn`
 ```
 conda install -c conda-forge yarn 
+conda install -c anaconda nodejs
 ```
 
 For `git`

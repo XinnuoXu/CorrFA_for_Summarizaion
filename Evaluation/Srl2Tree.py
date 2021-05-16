@@ -119,6 +119,21 @@ class Srl2Tree():
         print ("Building Trees Done...")
         return outputs
 
+    def annotation_process(self, inputs):
+        print ("Building Trees...")
+        outputs = []
+        for line in inputs:
+            srl_res = json.loads(line)
+            document_trees = [self.one_summary(item) for item in srl_res["srl_document"]]
+            gold_trees = [self.one_summary(item) for item in srl_res["srl_gold"]]
+            out_json = {}
+            out_json["doc_id"] = srl_res["doc_id"]
+            out_json["gold_tree"] = gold_trees
+            out_json["document_trees"] = document_trees
+            outputs.append(json.dumps(out_json))
+        print ("Building Trees Done...")
+        return outputs
+
 
 if __name__ == '__main__':
     input_file = "../Data/" + sys.argv[1]

@@ -195,9 +195,37 @@ def feature_converge(attn):
             attn[i] = 0.1
     return attn
 
+def phrase_fact_pgen(attn, count, context):
+    fact_idx = []; fact_stack = []; fact_ph_size = [0] * len(context)
+    type_stack = []; ret_attn = [0.0] * len(context)
+    for i, tok in enumerate(context):
+        cls = label_classify(tok)
+        if cls == "fact":
+            fact_idx.append(i)
+            fact_stack.append(i)
+            type_stack.append(cls)
+        elif cls == "phrase":
+            type_stack.append(cls)
+            #attn[fact_stack[-1]] += attn[i]
+            #fact_ph_size[fact_stack[-1]] += 1
+            for j, idx in enumerate(fact_stack):
+                ret_attn[idx] += attn[i]
+                fact_ph_size[idx] += 1
+        elif cls == "end":
+            if type_stack.pop() == "fact":
+                fact_stack.pop()
+    for i in range(len(context)):
+        if i in fact_idx:
+            idx = i
+            if fact_ph_size[idx] == 0:
+                continue
+            ret_attn[idx] = ret_attn[idx] / fact_ph_size[idx]
+    return ret_attn
+
 def get_fact_attn(attn_dists, p_gens, context, summary):
     fact_idx = []; fact_stack = []; fact_ph_size = [0] * len(summary)
-    type_stack = []
+    type_stack = []; p_gen_stack = []; p_gen_facts = []
+    p_gen_tok_stack = []; p_gen_tok_facts = []
     for i, tok in enumerate(summary):
         cls = label_classify(tok)
         if cls == "fact":
@@ -206,20 +234,40 @@ def get_fact_attn(attn_dists, p_gens, context, summary):
             type_stack.append(cls)
         elif cls == "phrase":
             type_stack.append(cls)
+            p_gen_stack.append(p_gens[i])
             for idx in fact_stack:
                 #attn_dists[idx] += feature_converge(attn_dists[i])
-                attn_dists[idx] += attn_dists[i]
+                attn_dists[idx] = np.maximum(attn_dists[idx], attn_dists[i])
+                #attn_dists[idx] += attn_dists[i]
                 fact_ph_size[idx] += 1
         elif cls == "end":
             if type_stack.pop() == "fact":
+                p_gen_facts.append(p_gen_stack)
+                p_gen_tok_facts.append(p_gen_tok_stack)
+                p_gen_stack = []
+                p_gen_tok_stack = []
                 fact_stack.pop()
-    for idx in fact_idx:
+        elif cls == 'token':
+            p_gen_tok_stack.append(p_gens[i])
+
+    for i, idx in enumerate(fact_idx):
         if fact_ph_size[idx] == 0:
             continue
+
+        p_gens[idx] = max(phrase_fact_pgen(attn_dists[idx], fact_ph_size[idx], context))
+
         attn_dists[idx] = phrase_attn_to_fact(attn_dists[idx], context)
         attn_dists[idx] = attn_dists[idx] / fact_ph_size[idx]
         attn_dists[idx] = reweight_fact_attn(attn_dists[idx])
-        p_gens[idx] = max(attn_dists[idx])
+
+        '''
+        if len(p_gen_facts[i]) > 0:
+            p_gens[idx] = sum(p_gen_facts[i])/len(p_gen_facts[i])
+        elif len(p_gen_tok_facts[i]) > 0:
+            p_gens[idx] = sum(p_gen_tok_facts[i])/len(p_gen_tok_facts[i])
+        else:
+            p_gens[idx] = 0.0
+        '''
     return attn_dists, p_gens
 
 def _top_n_filter(tok_align, n):
@@ -434,9 +482,9 @@ class DataSet:
                 if clean_item != "":
                     src_list.append(clean_item)
             tmp_split = self.in_tgt[i].split("\t")
-            if len(tmp_split) == 2:
-                self.in_tgt[i] = tmp_split[0]
-                doc_id = tmp_split[1]
+            if len(tmp_split) >= 2:
+                self.in_tgt[i] = ' '.join(tmp_split[:-1])
+                doc_id = tmp_split[-1]
             else:
                 doc_id = -1
             tgt = self.clean(self.in_tgt[i])
@@ -452,7 +500,10 @@ class DataSet:
                 exs = []
                 for j, ex in enumerate(tmp_examples):
                     exs.append((ex, last_hidden_states[j], self.stop_words, doc_ids[j]))
-                result_list = self.pool.map(multiprocessing_func, exs)
+                if self.pool == None:
+                    result_list = [multiprocessing_func(ex) for ex in exs]
+                else:
+                    result_list = self.pool.map(multiprocessing_func, exs)
                 for js in result_list:
                     if js != "":
                         self.fpout.write(js + "\n")
@@ -471,7 +522,10 @@ class DataSet:
             exs = []
             for j, ex in enumerate(tmp_examples):
                 exs.append((ex, last_hidden_states[j], self.stop_words, doc_ids[j]))
-            result_list = self.pool.map(multiprocessing_func, exs)
+            if self.pool == None:
+                result_list = [multiprocessing_func(ex) for ex in exs]
+            else:
+                result_list = self.pool.map(multiprocessing_func, exs)
             for js in result_list:
                 if js != "":
                     self.fpout.write(js + "\n")

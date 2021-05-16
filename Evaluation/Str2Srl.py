@@ -47,6 +47,46 @@ class Str2Srl():
         print ("Building Srls Done...")
         return outputs
 
+    def annotation_srl(self, sentences):
+        one_file = {}
+        sentences = [{"sentence": line} for line in sentences]
+        srl_res = []; start_idx = 0
+        while start_idx < len(sentences):
+            batch_sentences = sentences[start_idx: min(start_idx + self.batch_size, len(sentences))]
+            srl_res.extend(self.srl.predict_batch_json(batch_sentences))
+            start_idx += self.batch_size
+        return srl_res
+
+        if len(srl_res) > 1:
+            one_file["srl_document"] = srl_res[:-2]
+            one_file["srl_gold"] = srl_res[-2]
+            one_file["srl_cand"] = srl_res[-1]
+            one_file["doc_id"] = doc_id
+            return json.dumps(one_file)
+        return ""
+
+    def annotation_process(self, srcs, golds):
+        print ("Building Srls...")
+        outputs = []
+        for i, line in enumerate(srcs):
+            one_file = {}
+            sentences = line.strip().split('\t')
+            srl_res = self.annotation_srl(sentences)
+            if len(srl_res) < 1:
+                continue
+            one_file["srl_document"] = srl_res
+
+            sentences = golds[i].strip().split('\t')
+            srl_res = self.annotation_srl(sentences)
+            if len(srl_res) < 1:
+                continue
+            one_file["srl_gold"] = srl_res
+            one_file["doc_id"] = str(i)
+            
+            outputs.append(json.dumps(one_file))
+        print ("Building Srls Done...")
+        return outputs
+
 if __name__ == '__main__':
     src_file = "../Data/" + sys.argv[1]
     gold_file = "../Data/" + sys.argv[2]

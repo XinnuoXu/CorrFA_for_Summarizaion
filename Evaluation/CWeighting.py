@@ -168,8 +168,9 @@ def phrase_attn_to_fact(attn, context):
             #attn[fact_stack[-1]] += attn[i]
             #fact_ph_size[fact_stack[-1]] += 1
             for j, idx in enumerate(fact_stack):
-                attn[idx] += attn[i] * (1 / ((len(fact_stack)-j) ** 0.5))
-                fact_ph_size[idx] += 1
+                if attn[idx].sum() > 0:
+                    attn[idx] += attn[i] * (1 / ((len(fact_stack)-j) ** 0.5))
+                    fact_ph_size[idx] += 1
         elif cls == "end":
             if type_stack.pop() == "fact":
                 fact_stack.pop()
@@ -208,7 +209,14 @@ def phrase_fact_pgen(attn, count, context):
             type_stack.append(cls)
             #attn[fact_stack[-1]] += attn[i]
             #fact_ph_size[fact_stack[-1]] += 1
+            '''
             for j, idx in enumerate(fact_stack):
+                ret_attn[idx] += attn[i]
+                fact_ph_size[idx] += 1
+            '''
+            if attn[i].sum() > 0:
+                #attn[i].sum() == 0 is stopword phrase
+                idx = fact_stack[-1]
                 ret_attn[idx] += attn[i]
                 fact_ph_size[idx] += 1
         elif cls == "end":
@@ -235,11 +243,16 @@ def get_fact_attn(attn_dists, p_gens, context, summary):
         elif cls == "phrase":
             type_stack.append(cls)
             p_gen_stack.append(p_gens[i])
+            '''
             for idx in fact_stack:
                 #attn_dists[idx] += feature_converge(attn_dists[i])
                 attn_dists[idx] = np.maximum(attn_dists[idx], attn_dists[i])
                 #attn_dists[idx] += attn_dists[i]
                 fact_ph_size[idx] += 1
+            '''
+            idx = fact_stack[-1]
+            attn_dists[idx] = np.maximum(attn_dists[idx], attn_dists[i])
+            fact_ph_size[idx] += 1
         elif cls == "end":
             if type_stack.pop() == "fact":
                 p_gen_facts.append(p_gen_stack)
@@ -255,6 +268,7 @@ def get_fact_attn(attn_dists, p_gens, context, summary):
             continue
 
         p_gens[idx] = max(phrase_fact_pgen(attn_dists[idx], fact_ph_size[idx], context))
+        print (phrase_fact_pgen(attn_dists[idx], fact_ph_size[idx], context))
 
         attn_dists[idx] = phrase_attn_to_fact(attn_dists[idx], context)
         attn_dists[idx] = attn_dists[idx] / fact_ph_size[idx]

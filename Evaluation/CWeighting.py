@@ -268,7 +268,6 @@ def get_fact_attn(attn_dists, p_gens, context, summary):
             continue
 
         p_gens[idx] = max(phrase_fact_pgen(attn_dists[idx], fact_ph_size[idx], context))
-        print (phrase_fact_pgen(attn_dists[idx], fact_ph_size[idx], context))
 
         attn_dists[idx] = phrase_attn_to_fact(attn_dists[idx], context)
         attn_dists[idx] = attn_dists[idx] / fact_ph_size[idx]
